@@ -1,0 +1,23 @@
+@CHARSET "UTF-8";
+
+.MerchantTable {
+	border-collapse: collapse;
+	border: 1px solid #000000;
+}
+
+.MerchantTableHeader {
+	text-align: center;
+	background: none repeat scroll 0 0 #B5B5B5;
+	border-bottom: 1px solid #000000;
+	padding: 2px;
+}
+
+.MerchantTableOddRow {
+	text-align: center;
+	background: none repeat scroll 0 0 #FFFFFFF;
+}
+
+.MerchantTableEvenRow {
+	text-align: center;
+	background: none repeat scroll 0 0 #D3D3D3;
+}
