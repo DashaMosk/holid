@@ -29,6 +29,11 @@
 			<p:column headerText="Block Date">
 				<h:outputText value="#{user.blockDate}" />
 			</p:column>
+			
+			<p:column headerText="Edit">
+				<p:commandButton value="Edit" 	immediate="true" 
+					action="#{userCardView.showUserCard(user)}"/>
+			</p:column>
 		</p:dataTable>
 	</ui:define>
 </ui:composition>
