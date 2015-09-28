@@ -11,45 +11,45 @@
 	
 	<ui:define name="content">
 	<h:body> 
-		<!-- 		<h2>#{msg['bskt_title']}</h2> -->
 		#{scheduleView.loadData()}
-		<h:form>
-		
+		<h:form>		
 			<p:growl id="messages" showDetail="true" />
 			<h:panelGrid columnClasses="value">
 				<h3 style="margin-top: 0">Editable Schedule</h3>
 				<p:schedule id="schedule" value="#{scheduleView.eventModel}"
-					widgetVar="myschedule" timeZone="GMT+2"	locale="ua">
+					widgetVar="myschedule" locale="ua" timeZone="GMT+3">
 					<p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}"
 						update="eventDetails" oncomplete="PF('eventDialog').show();" />
 					<p:ajax event="eventSelect"
 						listener="#{scheduleView.onEventSelect}" update="eventDetails"
 						oncomplete="PF('eventDialog').show();" />
-					<p:ajax event="eventMove" listener="#{scheduleView.onEventMove}"
-						update="messages" />
-					<p:ajax event="eventResize"
-						listener="#{scheduleView.onEventResize}" update="messages" />						
+<!-- 					<p:ajax event="eventMove" listener="#{scheduleView.onEventMove}" -->
+<!-- 						update="messages" /> -->
+<!-- 					<p:ajax event="eventResize"  -->
+<!-- 						listener="#{scheduleView.onEventResize}" update="messages" />						 -->
 				</p:schedule>
 			</h:panelGrid>
 			
 			<p:dialog widgetVar="eventDialog" header="Event Details"
 				showEffect="clip" hideEffect="clip">
-				<h:panelGrid id="eventDetails" columns="2">
+				<h:panelGrid id="eventDetails" columns="2" rendered="#{loginController.isLoggedIn()}">
 					<p:outputLabel for="title" value="Titles:" />
 					<p:inputText id="title" value="#{scheduleView.event.title}"
 						required="true" />
 					<p:outputLabel for="hdate" value="Date:" />
-					<p:calendar id="hdate" value="#{scheduleView.event.startDate}"
-						timeZone="GMT+2" pattern="dd/MM/yyyy" required="true"/>
+					<p:calendar id="hdate" value="#{scheduleView.event.startDate}" timeZone="GMT+3"
+						pattern="dd/MM/yyyy" required="true"/>						
 					<p:commandButton id="addButton" value="Save"
 						actionListener="#{scheduleView.addEvent}"
 						oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
                      <p:commandButton id="deleteButton" value="Delete"
 						actionListener="#{scheduleView.deleteEvent}"
-						oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
-                      <!-- 					<p:commandButton type="reset" value="Reset" /> -->
-
-						
+						oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />					
+				</h:panelGrid>
+				
+				<h:panelGrid id="signIn" columns="2" rendered="#{not loginController.isLoggedIn()}">
+					<h:outputText value="You should sign in" />
+                     <p:commandButton id="autorith" value="Sign in" action="#{loginController.signIn()}"/>				
 				</h:panelGrid>
 			</p:dialog>
 		</h:form>

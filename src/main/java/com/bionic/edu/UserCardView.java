@@ -1,22 +1,31 @@
 package com.bionic.edu;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 @Named
 @ViewScoped
 public class UserCardView {
 	private int idUser;
 	private String login;
-	private String rights;
+	private int rights;
+	private String password;
 	private Timestamp regDate;
 	private Timestamp blockDate;
 	
-	
+	@Autowired
+	UsersService usersService;
+
+	@Autowired
+	private PasswordService passService;
+
 	public int getIdUser() {
 		return idUser;
 	}
@@ -29,11 +38,18 @@ public class UserCardView {
 	public void setLogin(String login) {
 		this.login = login;
 	}
-	public String getRights() {
+	public int getRights() {
 		return rights;
 	}
-	public void setRights(String rights) {
+	public void setRights(int rights) {
 		this.rights = rights;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	public Timestamp getRegDate() {
@@ -50,7 +66,38 @@ public class UserCardView {
 		return blockDate;
 	}
 	
-	public String getRight(int num){
+	private void clearRecords() {
+		setIdUser(0);
+		setLogin(null);
+		setPassword(null);
+		setRights(0);
+		setRegDate(null);
+		setBlockDate(null);		
+	}	
+	
+	private Users createUser() {
+		Users user = new Users();
+		user.setLogin(login);
+		user.setPassword(passwordEncrypt("123"));
+		user.setRights(rights);
+		user.setRegDate(Timestamp.valueOf(LocalDateTime.now()));
+		user.setBlockDate(null);
+		return user;		
+	}
+	
+	private Users getUser() {
+		Users user = new Users();
+		user.setIdUser(idUser);
+		user.setLogin(login);
+		user.setPassword(password);
+		user.setRights(rights);
+		user.setRegDate(regDate);
+		user.setBlockDate(blockDate);
+		return user;		
+	}
+	
+	public String getRight(String right){
+		int num = Integer.valueOf(right);
 		for (Rights r: Rights.values()) {
 			if(r.getNum() == num) {
 				return r.toString();
@@ -60,31 +107,61 @@ public class UserCardView {
 	}
 
 	public String showUserCard(Users user) {
+		clearRecords();
 		setIdUser(user.getIdUser());
 		setLogin(user.getLogin());
-		setRights(getRight(user.getRights()));
+		setPassword(user.getPassword());
+		setRights(user.getRights());
 		setRegDate(user.getRegDate());
 		setBlockDate(user.getBlockDate());
 		return "usercard.xhtml?faces-redirect=true";
 	}
 	
+	public String showNewUserCard() {
+		clearRecords();
+		return "usercard.xhtml?faces-redirect=true";
+	}
+
 	public String addEditUser() {
-		System.out.println("ID of user = " +getIdUser());
+		if (idUser == 0) {
+			usersService.save(createUser());
+		} else {
+			usersService.edit(getUser());
+		}
 		return "users.xhtml?faces-redirect=true";
 	}
 	
 	public String cancel() {
-		System.out.println("ID of user = " +getIdUser());
+		clearRecords();
 		return "users.xhtml?faces-redirect=true";
 	}
 	
 	public String passwordReset() {
-		System.out.println("ID of user = " +getIdUser());
+		if (idUser != 0) {
+			password = passwordEncrypt("123");
+			usersService.edit(getUser());
+		}
 		return "usercard.xhtml?faces-redirect=true";
+	}
+	
+	public String blockUnblock(Users user) {
+		if (user.getBlockDate() != null) {
+			user.setBlockDate(null);
+		} else {
+			user.setBlockDate(Timestamp.valueOf(LocalDateTime.now()));
+		}		
+		usersService.edit(user);
+		return "users.xhtml?faces-redirect=true";
 	}
 	
 	public List<Rights> getListRights() {
 		return Arrays.asList(Rights.values());
 	}
+	
+	public String passwordEncrypt(String password) {
+		String encryptedPassword = passService.encrypt(password);
+		return encryptedPassword;
+	}
+
 
 }

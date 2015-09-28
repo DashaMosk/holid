@@ -32,5 +32,12 @@ public class UsersServiceImpl implements UsersService {
 		List<Users> users = usersDao.getAllUsers();
 		return users;
 	}
+	
+	@Override
+	public Users authorize(String login, String password) {
+		Users user = usersDao.authorize(login, password);
+		return user;
+	}
+
 
 }

@@ -1,5 +1,6 @@
 package com.bionic.edu;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,6 +45,15 @@ public class HolidaysDaoImpl implements HolidaysDao {
 	public void delete(Holidays holiday) {
 		Holidays holid = em.find(Holidays.class, holiday.getId());
 		em.remove(holid);		
+	}
+
+	@Override
+	public Holidays findByUserDate(String user, Date date) {
+		TypedQuery<Holidays> queryH = em.createQuery("SELECT h FROM Holidays h WHERE h.hUser = :huser AND h.hDate = :hdate", Holidays.class);
+		queryH.setParameter("huser", user);
+		queryH.setParameter("hdate", date);
+		Holidays hol = queryH.getSingleResult();	 
+		return hol;
 	}
 
 }

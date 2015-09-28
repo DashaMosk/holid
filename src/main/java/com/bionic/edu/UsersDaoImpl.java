@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 @Repository
 public class UsersDaoImpl implements UsersDao {
@@ -34,4 +35,19 @@ public class UsersDaoImpl implements UsersDao {
 		users = queryU.getResultList();
 		return users;		
 	}
+	
+	@Override
+	public Users authorize(String login, String password) { // authorization
+		// for staff
+		TypedQuery<Users> query = em.createQuery(
+				"SELECT u FROM Users u WHERE u.login = ?1 AND u.password = ?2",
+				Users.class);
+
+		List<Users> u = null;
+		query.setParameter(1, login);
+		query.setParameter(2, password);
+		u = query.getResultList();
+		return CollectionUtils.isEmpty(u) ? null : u.get(0);
+	}
+
 }

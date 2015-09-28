@@ -1,5 +1,6 @@
 package com.bionic.edu;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -39,6 +40,12 @@ public class HolidayServiceImpl implements HolidayService {
 	@Transactional
 	public void delete(Holidays holiday) {
 		holidaysDao.delete(holiday);		
+	}
+
+	@Override
+	public Holidays findByUserDate(String user, Date date) {
+		Holidays holiday = holidaysDao.findByUserDate(user, date);
+		return holiday;
 	}
 
 }

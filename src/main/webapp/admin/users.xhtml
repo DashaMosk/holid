@@ -7,8 +7,11 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-<ui:composition template="WEB-INF/templates/basic.xhtml">
+<ui:composition template="../WEB-INF/templates/basic.xhtml">
 	<ui:define name="content">
+       	<p:commandButton value="Add new User" action="#{userCardView.showNewUserCard()}" />
+       	<p:commandButton value="Schedule" action="#{scheduleView.showSchedule()}" />
+       	#{usersView.init()}
 		<p:dataTable var="user" value="#{usersView.users}">
 			<p:column headerText="Id">
 				<h:outputText value="#{user.idUser}" />
@@ -19,7 +22,7 @@
 			</p:column>
 
 			<p:column headerText="Rights">
-				<h:outputText value="#{user.rights}" />
+				<h:outputText value="#{userCardView.getRight(user.rights)}" />
 			</p:column>
 
 			<p:column headerText="registry Date">
@@ -33,8 +36,10 @@
 			<p:column headerText="Edit">
 				<p:commandButton value="Edit" 	immediate="true" 
 					action="#{userCardView.showUserCard(user)}"/>
+				<p:commandButton value="Block\Unblock" 	immediate="true" 
+					action="#{userCardView.blockUnblock(user)}"/>
 			</p:column>
-		</p:dataTable>
+		</p:dataTable>		
 	</ui:define>
 </ui:composition>
 </html>

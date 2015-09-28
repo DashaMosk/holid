@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 
 @Entity
@@ -18,7 +19,20 @@ public class Users {
 	private int rights;
 	private Timestamp regDate;
 	private Timestamp blockDate;
-	
+
+	@Transient
+	private boolean loggedIn;
+
+	@Transient
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	@Transient
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
+
 	public Users() {
 	}
 		

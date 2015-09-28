@@ -20,15 +20,19 @@ import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
+import org.springframework.beans.factory.annotation.Autowired;
  
 @Named
 @ViewScoped
 public class ScheduleView implements Serializable {
 
-	private static final long serialVersionUID = -6443743732704315328L;
+	private static final long serialVersionUID = 1L;
 
 	@Inject
 	HolidayService holService;
+	
+	@Autowired
+	LoginController loginController;
 	
     private ScheduleModel eventModel;
  
@@ -42,25 +46,16 @@ public class ScheduleView implements Serializable {
 		eventModel.clear();
 		List<Holidays> events_ = holService.getAll();
      	for(Holidays h: events_) {
-     		System.out.println(h);
+     		System.out.println(h.gethUser() + " "+ h.getId() + " "+ h.gethDate());
      		DefaultScheduleEvent shEve = new DefaultScheduleEvent(h.gethUser(), h.gethDate(), h.gethDate());
      		shEve.setDescription(String.valueOf(h.getId()));
      		eventModel.addEvent(shEve);
      	}
 	}
-	
-    public Date getRandomDate(Date base) {
-        Calendar date = Calendar.getInstance();
-        date.setTime(base);
-        date.add(Calendar.DATE, ((int) (Math.random()*30)) + 1);    //set random day of month
-         
-        return date.getTime();
-    }
      
     public Date getInitialDate() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(calendar.get(Calendar.YEAR), Calendar.FEBRUARY, calendar.get(Calendar.DATE), 0, 0, 0);
-         
+        calendar.set(calendar.get(Calendar.YEAR), Calendar.FEBRUARY, calendar.get(Calendar.DATE), 0, 0, 0);        
         return calendar.getTime();
     }
      
@@ -78,14 +73,17 @@ public class ScheduleView implements Serializable {
      
     public void addEvent(ActionEvent actionEvent) {
         if(event.getId() == null) {
-            holService.save(getHoliday());
-            eventModel.addEvent(event);
+        	Holidays holiday = getHoliday();
+        	holService.save(holiday);
+        	Holidays savedHoliday = holService.findByUserDate(holiday.gethUser(), holiday.gethDate());
+            DefaultScheduleEvent shEve =  new DefaultScheduleEvent(savedHoliday.gethUser(), savedHoliday.gethDate(), savedHoliday.gethDate());
+     		shEve.setDescription(String.valueOf(savedHoliday.getId()));
+            eventModel.addEvent(shEve);
         }
         else {
             holService.edit(getHoliday());
             eventModel.updateEvent(event);
-        }
-         
+        }         
         event = new DefaultScheduleEvent();
     }
     
@@ -97,23 +95,46 @@ public class ScheduleView implements Serializable {
         }
     }
      
-    public void onEventSelect(SelectEvent selectEvent) {
-        event = (ScheduleEvent) selectEvent.getObject();
+    public void onEventSelect(SelectEvent selectEvent) {    	
+    		event = (ScheduleEvent) selectEvent.getObject();
+    }
+    
+    public String showSchedule() {
+    	return  "../schedule.xhtml?faces-redirect=true";
     }
      
     public void onDateSelect(SelectEvent selectEvent) {
         event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
     }
      
+/*    public void onEventMove(ScheduleEntryMoveEvent eventEM) {
+    	FacesMessage message = null;
+    	int id = Integer.valueOf(eventEM.getScheduleEvent().getDescription());
+    	Holidays hol =  holService.findById(id);
+    	System.out.println(hol.getId() +", "+hol.gethDate());
+    	if(eventEM.getDayDelta() > 0) {
+    		hol.sethDate(Date.from(hol.gethDate().toInstant().plusSeconds(86400*eventEM.getDayDelta())));
+    		System.out.println(hol.gethDate());
+    	} else {
+    		hol.sethDate(Date.from(hol.gethDate().toInstant().minusSeconds(86400*(-eventEM.getDayDelta()))));
+    	}   
+    	
+    	if(loginController.isLoggedIn()) {
+    		holService.edit(hol);
+    		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Changes saved, Day delta:" + eventEM.getDayDelta()); 
+    	} else {
+    		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Saving changes", "You should sign in for saving changes"); 
+    	}
+    	addMessage(message);      
+    }*/
+    
     public void onEventMove(ScheduleEntryMoveEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-         
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());        
         addMessage(message);
     }
      
     public void onEventResize(ScheduleEntryResizeEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-         
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());        
         addMessage(message);
     }
      
@@ -129,7 +150,8 @@ public class ScheduleView implements Serializable {
     	hol.sethDate(event.getStartDate());
     	hol.sethUser(event.getTitle());
     	hol.setDateSet(Timestamp.valueOf(LocalDateTime.now()));
-    	hol.setIdUserSet(1); //temporary
+    	hol.setIdUserSet(loginController.getUser().getIdUser());
+    	System.out.println(hol.getId() + " "+ hol.gethUser() + hol.gethDate());
     	return hol;    	
     }
 }
