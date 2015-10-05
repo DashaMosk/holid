@@ -52,7 +52,14 @@ public class HolidaysDaoImpl implements HolidaysDao {
 		TypedQuery<Holidays> queryH = em.createQuery("SELECT h FROM Holidays h WHERE h.hUser = :huser AND h.hDate = :hdate", Holidays.class);
 		queryH.setParameter("huser", user);
 		queryH.setParameter("hdate", date);
-		Holidays hol = queryH.getSingleResult();	 
+		Holidays hol =  null;
+		try{
+			hol = queryH.getSingleResult();	 
+		}catch (javax.persistence.NoResultException e) {
+			System.out.println("There is no information in Holidays with date "+ date + ", user "+ user);
+		}catch (javax.persistence.NonUniqueResultException e) {
+			System.out.println("There is not unique data in Holidays with date "+ date + ", user "+ user);			
+		}
 		return hol;
 	}
 

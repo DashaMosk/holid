@@ -9,27 +9,26 @@
 
 <ui:composition template="WEB-INF/templates/blankbasic.xhtml">
 	<ui:define name="content">
+		<p:panel header="Sign in">
 		<div align="center">
 			<h2>Please, enter your credentials below.</h2>
 		</div>
 		<div align="center">
 			<h:form>
-				<h:panelGrid columns="3">
-
-					<p:outputLabel for="username" value="Username" />
-					<h:inputText value="#{loginController.username}" required="true"
-						requiredMessage="Enter name" id="username" />
-					<h:message for="username" styleClass="error" />
-
-					<p:outputLabel for="password" value="Password" />
-					<h:inputSecret value="#{loginController.password}" required="true"
-						requiredMessage="Enter password" id="password" />
-					<h:message for="password" styleClass="error" />
+<!-- 			    <p:messages autoUpdate="true"/> -->
+			    <p:growl id="growl" showDetail="false" sticky="true" />  
+      			<h:panelGrid columns="2">
+					<p:outputLabel for="username" value="Username" style="font-weight:bold"/>
+					<p:inputText value="#{loginController.username}" required="true" id="username" requiredMessage="The username is required"/>
+        
+					<p:outputLabel for="password" value="Password" style="font-weight:bold"/>
+					<p:password value="#{loginController.password}" required="true" id="password" requiredMessage="The password is required"/>
 					<br />
-					<p:commandButton value="Login" action="#{loginController.login()}" />
+					<p:commandButton value="Login" action="#{loginController.login()}" update="growl" />
 				</h:panelGrid>
 			</h:form>
 		</div>
+		</p:panel>
 	</ui:define>
 </ui:composition>
 </html>

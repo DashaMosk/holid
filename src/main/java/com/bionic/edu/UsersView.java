@@ -5,9 +5,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 
-@Named
+import org.springframework.stereotype.Component;
+
+@Component
 @ViewScoped
 public class UsersView {
 	private List<Users> users;
@@ -23,5 +24,13 @@ public class UsersView {
     public List<Users> getUsers() {
         return users;
     }
+    
+	public String showUsers() {
+		return "/admin/users.xhtml?faces-redirect=true";
+	}
+	
+	public String showPasswordChange() {
+		return "/changePassword.xhtml?faces-redirect=true";
+	}
 
 }

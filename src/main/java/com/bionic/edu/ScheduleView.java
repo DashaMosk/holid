@@ -74,11 +74,14 @@ public class ScheduleView implements Serializable {
     public void addEvent(ActionEvent actionEvent) {
         if(event.getId() == null) {
         	Holidays holiday = getHoliday();
-        	holService.save(holiday);
-        	Holidays savedHoliday = holService.findByUserDate(holiday.gethUser(), holiday.gethDate());
-            DefaultScheduleEvent shEve =  new DefaultScheduleEvent(savedHoliday.gethUser(), savedHoliday.gethDate(), savedHoliday.gethDate());
-     		shEve.setDescription(String.valueOf(savedHoliday.getId()));
-            eventModel.addEvent(shEve);
+        	Holidays holidayInBase =  holService.findByUserDate(holiday.gethUser(), holiday.gethDate());
+        	if (holidayInBase == null) { //there is no such information in database 
+        		holService.save(holiday);
+        		Holidays savedHoliday = holService.findByUserDate(holiday.gethUser(), holiday.gethDate());
+        		DefaultScheduleEvent shEve =  new DefaultScheduleEvent(savedHoliday.gethUser(), savedHoliday.gethDate(), savedHoliday.gethDate());
+        		shEve.setDescription(String.valueOf(savedHoliday.getId()));
+        		eventModel.addEvent(shEve);
+        	}
         }
         else {
             holService.edit(getHoliday());
@@ -104,7 +107,8 @@ public class ScheduleView implements Serializable {
     }
      
     public void onDateSelect(SelectEvent selectEvent) {
-        event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
+    	String title = loginController.getUsername();
+        event = new DefaultScheduleEvent(title, (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
     }
      
 /*    public void onEventMove(ScheduleEntryMoveEvent eventEM) {

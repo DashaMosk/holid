@@ -5,17 +5,19 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
-	>
-	
+	>	
 <head>
 	<h:outputStylesheet library="css" name="cstyle.css" />
 </head>
-	
+<!-- 			<h:commandLink action="#{loginController.signIn()}">
+					<h:graphicImage value="resources/images/pack.ico" height="24"
+								width="24" title="Book" />
+			</h:commandLink> -->				
 <h:body>
 	<ui:composition>
-		<h:form>
-			 <p:commandButton id="sighin" value="Sign in" action="#{loginController.signIn()}"/>	
-			 <p:commandButton id="signput" value="Sign out" action="#{loginController.logout()}"/>	
+		<h:form>			
+			 <p:commandButton id="logIn" value="Sign in" action="#{loginController.signIn()}"/>
+			 <p:commandButton id="logOut" value="Sign out" action="#{loginController.logout()}"/>		 
 		</h:form>
 	</ui:composition>
 </h:body>
