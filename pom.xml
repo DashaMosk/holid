@@ -4,8 +4,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.bionic.edu</groupId>
-	<artifactId>P541MerchantList</artifactId>
-	<version>1.0.0.CI-SNAPSHOT</version>
+	<artifactId>htholidays</artifactId>
+	<version>1</version>
 	<packaging>war</packaging>
 	<name>Spring JSF integration</name>
 	<url>http://www.springframework.org</url>
@@ -152,6 +152,13 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+		
+		<dependency>
+  			 <groupId>com.aestasit.infrastructure.sshoogr</groupId>
+   			 <artifactId>sshoogr</artifactId>
+  			  <version>0.9.16</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

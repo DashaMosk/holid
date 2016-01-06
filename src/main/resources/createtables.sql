@@ -13,6 +13,9 @@ CREATE TABLE `users` (
   `password` varchar(45) NOT NULL,
   `rights` int(11) NOT NULL,
   `regdate` timestamp NULL DEFAULT NULL,
-  `blockdate` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `blockdate` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`iduser`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+ALTER TABLE `hthollydays`.`users` 
+CHANGE COLUMN `blockdate` `blockdate` TIMESTAMP NULL DEFAULT NULL COMMENT '';
