@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.bionic.edu</groupId>
-	<artifactId>htholidays</artifactId>
+	<artifactId>holidays</artifactId>
 	<version>1</version>
 	<packaging>war</packaging>
 	<name>Spring JSF integration</name>
