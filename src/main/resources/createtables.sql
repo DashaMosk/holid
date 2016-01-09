@@ -1,3 +1,5 @@
+USE `hthollydays`;
+
 CREATE TABLE `holidays` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `DATESET` datetime DEFAULT NULL,
@@ -17,5 +19,5 @@ CREATE TABLE `users` (
   PRIMARY KEY (`iduser`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
-ALTER TABLE `hthollydays`.`users` 
-CHANGE COLUMN `blockdate` `blockdate` TIMESTAMP NULL DEFAULT NULL COMMENT '';
+/*ALTER TABLE `hthollydays`.`users`
+CHANGE COLUMN `blockdate` `blockdate` TIMESTAMP NULL DEFAULT NULL COMMENT '';*/
