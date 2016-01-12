@@ -7,7 +7,7 @@
 	<artifactId>holidays</artifactId>
 	<version>1</version>
 	<packaging>war</packaging>
-	<name>Spring JSF integration</name>
+	<name>Hybris team holidays</name>
 	<url>http://www.springframework.org</url>
 	<description>
 		<![CDATA[
@@ -123,16 +123,6 @@
 			<artifactId>eclipselink</artifactId>
 			<version>2.5.0</version>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>10.10.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbyclient</artifactId>
-			<version>10.10.1.1</version>
-		</dependency> -->
 
 		<!-- primeFaces -->
 		<dependency>
