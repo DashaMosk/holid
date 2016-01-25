@@ -1,4 +1,4 @@
-package com.bionic.edu;
+package com.epam;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -21,7 +21,10 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 import org.springframework.beans.factory.annotation.Autowired;
- 
+
+import com.epam.entity.Holidays;
+import com.epam.services.HolidayService;
+
 @Named
 @ViewScoped
 public class ScheduleView implements Serializable {

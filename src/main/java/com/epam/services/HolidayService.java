@@ -1,8 +1,9 @@
-package com.bionic.edu;
+package com.epam.services;
 
 import java.util.Date;
 import java.util.List;
 
+import com.epam.entity.Holidays;
 
 public interface HolidayService {
 	public void save(Holidays holiday);

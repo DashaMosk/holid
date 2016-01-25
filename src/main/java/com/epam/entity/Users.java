@@ -1,4 +1,4 @@
-package com.bionic.edu;
+package com.epam.entity;
 
 import java.sql.Timestamp;
 

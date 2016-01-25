@@ -12,7 +12,7 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
     
     <!-- Uncomment and add your base-package here:-->
-         <context:component-scan base-package="com.bionic.edu"/> 
+         <context:component-scan base-package="com.epam, com.epam.dao, com.epam.entity, com.epam.services"/> 
             
      <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
@@ -22,7 +22,14 @@
 	</bean> 
     
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="packagesToScan" value="com.bionic.edu"/>
+		<property name="packagesToScan">
+         		<array>
+              		<value>com.epam</value>
+              		<value>com.epam.dao</value>
+              		<value>com.epam.entity</value>
+              		<value>com.epam.services</value>
+        		</array>
+     	</property> 
 		<property name="dataSource" ref="dataSource"/>
 		<property name="persistenceUnitName" value="HybrisHolidays" />
 		<property name="jpaDialect"> 

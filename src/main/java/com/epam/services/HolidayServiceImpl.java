@@ -1,4 +1,4 @@
-package com.bionic.edu;
+package com.epam.services;
 
 import java.util.Date;
 import java.util.List;
@@ -8,6 +8,8 @@ import javax.inject.Named;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.epam.dao.HolidaysDao;
+import com.epam.entity.Holidays;
 
 @Named
 public class HolidayServiceImpl implements HolidayService {

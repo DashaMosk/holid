@@ -1,4 +1,4 @@
-package com.bionic.edu;
+package com.epam.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -7,6 +7,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
+
+import com.epam.entity.Holidays;
+
 
 @Repository
 public class HolidaysDaoImpl implements HolidaysDao {

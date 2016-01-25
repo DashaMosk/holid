@@ -1,4 +1,4 @@
-package com.bionic.edu;
+package com.epam;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
@@ -6,6 +6,10 @@ import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.epam.entity.Users;
+import com.epam.services.PasswordService;
+import com.epam.services.UsersService;
 
 @Component
 @SessionScoped

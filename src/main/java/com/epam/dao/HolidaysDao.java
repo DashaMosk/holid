@@ -1,6 +1,8 @@
-package com.bionic.edu;
+package com.epam.dao;
 import java.util.Date;
 import java.util.List;
+
+import com.epam.entity.Holidays;
 
 public interface HolidaysDao {
 	public void save(Holidays holiday);
