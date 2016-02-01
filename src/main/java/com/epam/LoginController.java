@@ -75,14 +75,12 @@ public class LoginController {
 	        message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error. The login or password is wrong", "The login or password is wrong" );        
 	        addMessage(message);
 	        return null;
-			//return redirectTo("loginPage.xhtml");
 		}
 
 		if (user.getBlockDate() != null) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error. The user is bloked", "The user is bloked" );        
 	        addMessage(message);
 	        return null;
-			//return redirectTo("loginPage.xhtml");
 		}
 
 		if (user.getRights() == 1) {

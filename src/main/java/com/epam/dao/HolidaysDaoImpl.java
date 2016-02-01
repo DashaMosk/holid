@@ -9,13 +9,15 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import com.epam.entity.Holidays;
-
+import org.apache.log4j.Logger;
 
 @Repository
 public class HolidaysDaoImpl implements HolidaysDao {
 	
 	@PersistenceContext
 	private EntityManager em;
+	
+	final static Logger logger = Logger.getLogger(HolidaysDaoImpl.class);
 
 	@Override
 	public void save(Holidays holiday) {
@@ -59,9 +61,11 @@ public class HolidaysDaoImpl implements HolidaysDao {
 		try{
 			hol = queryH.getSingleResult();	 
 		}catch (javax.persistence.NoResultException e) {
-			System.out.println("There is no information in Holidays with date "+ date + ", user "+ user);
+			logger.info("There is no information in Holidays with date "+ date + ", user "+ user);
+			//System.out.println("There is no information in Holidays with date "+ date + ", user "+ user);
 		}catch (javax.persistence.NonUniqueResultException e) {
-			System.out.println("There is not unique data in Holidays with date "+ date + ", user "+ user);			
+			logger.info("There is not unique data in Holidays with date "+ date + ", user "+ user);
+			//System.out.println("There is not unique data in Holidays with date "+ date + ", user "+ user);			
 		}
 		return hol;
 	}

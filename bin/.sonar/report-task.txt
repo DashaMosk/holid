@@ -1,0 +1,5 @@
+projectKey=holiday:project
+serverUrl=http://localhost:9000
+dashboardUrl=http://localhost:9000/dashboard/index/holiday:project
+ceTaskId=AVJ-pt3k3MN00cothQDp
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVJ-pt3k3MN00cothQDp

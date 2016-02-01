@@ -32,14 +32,14 @@ public class ScheduleView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	HolidayService holService;
+	transient HolidayService holService;
 	
 	@Autowired
-	LoginController loginController;
+	transient LoginController loginController;
 	
-    private ScheduleModel eventModel;
+    private transient ScheduleModel eventModel;
  
-    private ScheduleEvent event = new DefaultScheduleEvent();
+    private transient ScheduleEvent event = new DefaultScheduleEvent();
 
 	public ScheduleView() {
 		eventModel = new DefaultScheduleModel();
@@ -78,7 +78,7 @@ public class ScheduleView implements Serializable {
         if(event.getId() == null) {
         	Holidays holiday = getHoliday();
         	Holidays holidayInBase =  holService.findByUserDate(holiday.gethUser(), holiday.gethDate());
-        	if (holidayInBase == null) { //there is no such information in database 
+        	if (holidayInBase == null) { //there is no information in database 
         		holService.save(holiday);
         		Holidays savedHoliday = holService.findByUserDate(holiday.gethUser(), holiday.gethDate());
         		DefaultScheduleEvent shEve =  new DefaultScheduleEvent(savedHoliday.gethUser(), savedHoliday.gethDate(), savedHoliday.gethDate());
