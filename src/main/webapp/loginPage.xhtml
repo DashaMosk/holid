@@ -16,11 +16,11 @@
 		<div align="center">
 			<h:form>
 <!-- 			    <p:messages autoUpdate="true"/> -->
-			    <p:growl id="growl" showDetail="false" sticky="true" />  
+			    <p:growl id="growl" showDetail="false" sticky="true" />
       			<h:panelGrid columns="2">
 					<p:outputLabel for="username" value="Username" style="font-weight:bold"/>
 					<p:inputText value="#{loginController.username}" required="true" id="username" requiredMessage="The username is required"/>
-        
+
 					<p:outputLabel for="password" value="Password" style="font-weight:bold"/>
 					<p:password value="#{loginController.password}" required="true" id="password" requiredMessage="The password is required"/>
 					<br />
