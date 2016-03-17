@@ -1,14 +1,12 @@
 package com.epam.services;
 
-import java.util.List;
+import com.epam.dao.UsersDao;
+import com.epam.entity.Users;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import com.epam.dao.UsersDao;
-import com.epam.entity.Users;
+import java.util.List;
 
 @Named
 public class UsersServiceImpl implements UsersService {

@@ -1,15 +1,13 @@
 package com.epam.services;
 
-import java.util.Date;
-import java.util.List;
+import com.epam.dao.HolidaysDao;
+import com.epam.entity.Holidays;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import com.epam.dao.HolidaysDao;
-import com.epam.entity.Holidays;
+import java.util.Date;
+import java.util.List;
 
 @Named
 public class HolidayServiceImpl implements HolidayService {

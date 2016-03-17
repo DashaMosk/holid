@@ -1,18 +1,16 @@
 package com.epam;
 
-import java.io.IOException;
+import com.epam.entity.Users;
+import com.epam.services.PasswordService;
+import com.epam.services.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.epam.entity.Users;
-import com.epam.services.PasswordService;
-import com.epam.services.UsersService;
+import java.io.IOException;
 
 @Component
 @SessionScoped

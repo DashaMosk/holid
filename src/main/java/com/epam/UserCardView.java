@@ -1,18 +1,16 @@
 package com.epam;
 
+import com.epam.entity.Users;
+import com.epam.services.PasswordService;
+import com.epam.services.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.faces.bean.ViewScoped;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.epam.entity.Users;
-import com.epam.services.PasswordService;
-import com.epam.services.UsersService;
 
 @Named
 @ViewScoped

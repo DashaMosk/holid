@@ -1,25 +1,30 @@
 package com.epam;
- import java.io.Serializable;
- import java.util.Calendar;
- import java.util.Date;
- import java.util.TimeZone;
- import javax.annotation.PostConstruct;
- import javax.faces.application.FacesMessage;
- import javax.faces.bean.ManagedBean;
- import javax.faces.bean.ViewScoped;
- import javax.faces.context.FacesContext;
 
- import com.epam.entity.Booking;
- import com.epam.entity.RoomCategory;
- import org.primefaces.extensions.component.timeline.TimelineUpdater;
- import org.primefaces.extensions.event.timeline.TimelineAddEvent;
- import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
- import org.primefaces.extensions.event.timeline.TimelineSelectEvent;
- import org.primefaces.extensions.model.timeline.TimelineEvent;
- import org.primefaces.extensions.model.timeline.TimelineModel;
- import org.springframework.stereotype.Component;
+import com.epam.entity.Booking;
+import com.epam.entity.RoomCategory;
+import com.epam.entity.Vacations;
+import com.epam.services.VacationsService;
+import org.primefaces.extensions.component.timeline.TimelineUpdater;
+import org.primefaces.extensions.event.timeline.TimelineAddEvent;
+import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
+import org.primefaces.extensions.model.timeline.TimelineEvent;
+import org.primefaces.extensions.model.timeline.TimelineModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Component
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
+@Named
 @ViewScoped
 public class EditServerTimelineController implements Serializable {
 
@@ -31,67 +36,40 @@ public class EditServerTimelineController implements Serializable {
     private TimeZone timeZone = TimeZone.getTimeZone("Europe/Madrid");
     private boolean timeChangeable = true;
 
+    @Autowired
+    private VacationsService vacationsService;
+
     @PostConstruct
     protected void initialize() {
         // initial zooming is ca. one month to avoid hiding of event details (due to wide time range of events)
-        zoomMax = 1000L * 60 * 60 * 24 * 30;
+        zoomMax = 1000L * 60 * 60 * 24 * 360;
 
         // set initial start / end dates for the axis of the timeline (just for testing)
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        cal.set(2015, Calendar.FEBRUARY, 9, 0, 0, 0);
+        LocalDate localDate = LocalDate.now();
+        cal.set(localDate.getYear(), Calendar.JANUARY, 1, 0, 0, 0);
         start = cal.getTime();
-        cal.set(2015, Calendar.MARCH, 10, 0, 0, 0);
+        cal.set(localDate.getYear(), Calendar.DECEMBER, 31, 0, 0, 0);
         end = cal.getTime();
 
         // create timeline model
         model = new TimelineModel();
 
+        List<Vacations> vacationsList = vacationsService.getAll();
         // Server-side dates should be in UTC. They will be converted to a local dates in UI according to provided TimeZone.
         // Submitted local dates in UI are converted back to UTC, so that server receives all dates in UTC again.
-        cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        cal.set(2015, Calendar.JANUARY, 2, 0, 0, 0);
-        model.add(new TimelineEvent(new Booking(211, RoomCategory.DELUXE, "(0034) 987-111", "One day booking"), cal.getTime()));
 
-        cal.set(2015, Calendar.JANUARY, 26, 0, 0, 0);
-        Date begin = cal.getTime();
-        cal.set(2015, Calendar.JANUARY, 28, 23, 59, 59);
-        Date end = cal.getTime();
-        model.add(new TimelineEvent(new Booking(202, RoomCategory.EXECUTIVE_SUITE, "(0034) 987-333", "Three day booking"), begin,
-                end));
-
-        cal.set(2015, Calendar.FEBRUARY, 10, 0, 0, 0);
-        begin = cal.getTime();
-        cal.set(2015, Calendar.FEBRUARY, 15, 23, 59, 59);
-        end = cal.getTime();
-        model.add(new TimelineEvent(new Booking(150, RoomCategory.STANDARD, "(0034) 987-222", "Six day booking"), begin, end));
-
-        cal.set(2015, Calendar.FEBRUARY, 23, 0, 0, 0);
-        begin = cal.getTime();
-        cal.set(2015, Calendar.FEBRUARY, 27, 23, 59, 59);
-        end = cal.getTime();
-        model.add(new TimelineEvent(new Booking(178, RoomCategory.STANDARD, "(0034) 987-555", "Five day booking"), begin, end));
-
-        cal = Calendar.getInstance();
-        cal.set(2015, Calendar.MARCH, 6, 0, 0, 0);
-        model.add(new TimelineEvent(new Booking(101, RoomCategory.SUPERIOR, "(0034) 987-999", "One day booking"), cal.getTime()));
-
-        cal.set(2015, Calendar.MARCH, 19, 0, 0, 0);
-        begin = cal.getTime();
-        cal.set(2015, Calendar.MARCH, 22, 23, 59, 59);
-        end = cal.getTime();
-        model.add(new TimelineEvent(new Booking(80, RoomCategory.JUNIOR, "(0034) 987-444", "Four day booking"), begin, end));
-
-        cal.set(2015, Calendar.APRIL, 3, 0, 0, 0);
-        begin = cal.getTime();
-        cal.set(2015, Calendar.APRIL, 4, 23, 59, 59);
-        end = cal.getTime();
-        model.add(new TimelineEvent(new Booking(96, RoomCategory.DELUXE, "(0034) 987-777", "Two day booking"), begin, end));
-
-        cal.set(2015, Calendar.APRIL, 22, 0, 0, 0);
-        begin = cal.getTime();
-        cal.set(2015, Calendar.MAY, 1, 23, 59, 59);
-        end = cal.getTime();
-        model.add(new TimelineEvent(new Booking(80, RoomCategory.JUNIOR, "(0034) 987-444", "Ten day booking"), begin, end));
+        for(Vacations vac : vacationsList) {
+            LocalDate dStart = vac.getDateStart().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate dEnd = vac.getDateEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            cal.set(dStart.getYear(), dStart.getMonthValue(), dStart.getDayOfMonth(), 0, 0, 0);
+            Date begin = cal.getTime();
+            cal.set(dEnd.getYear(), dEnd.getMonthValue(), dEnd.getDayOfMonth(), 23, 59, 59);
+            Date end = cal.getTime();
+//           model.add(new TimelineEvent(new Booking(202, RoomCategory.EXECUTIVE_SUITE, "(0034) 987-333", "Three day booking"), begin,
+//                   end));
+            model.add(new TimelineEvent(new Vacations(vac.getUserName(), vac.getDateStart(), vac.getDateEnd(), vac.getDateSet(), vac.getIdUserSet()), begin, end));
+        }
     }
 
     public void onChange(TimelineModificationEvent e) {
@@ -138,7 +116,7 @@ public class EditServerTimelineController implements Serializable {
         // if everything was ok, delete the TimelineEvent in the model and update UI with the same response.
         // otherwise no server-side delete is necessary (see timelineWdgt.cancelDelete() in the p:ajax onstart).
         // we assume, delete in DB was successful
-        TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":mainForm:timeline");
+        TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":timeline");
         model.delete(event, timelineUpdater);
 
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "The booking " + getRoom() + " has been deleted", null);
@@ -151,7 +129,7 @@ public class EditServerTimelineController implements Serializable {
         // if everything was ok, update the TimelineEvent in the model and update UI with the same response.
         // otherwise no server-side update is necessary because UI is already up-to-date.
         // we assume, save in DB was successful
-        TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":mainForm:timeline");
+        TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":timeline");
         model.update(event, timelineUpdater);
 
         FacesMessage msg =
@@ -213,8 +191,9 @@ public class EditServerTimelineController implements Serializable {
         }
     }
 
+
     public String showVacations() {
-        return  "../timeline.xhtml?faces-redirect=true";
+        return  "timeline.xhtml?faces-redirect=true";
     }
 
 }

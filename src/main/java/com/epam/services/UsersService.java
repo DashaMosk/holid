@@ -1,8 +1,8 @@
 package com.epam.services;
 
-import java.util.List;
-
 import com.epam.entity.Users;
+
+import java.util.List;
 
 public interface UsersService {
 	public void save(Users user);

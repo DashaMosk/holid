@@ -1,15 +1,13 @@
 package com.epam;
 
-import java.util.List;
+import com.epam.entity.Users;
+import com.epam.services.UsersService;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-
-import org.springframework.stereotype.Component;
-
-import com.epam.entity.Users;
-import com.epam.services.UsersService;
+import java.util.List;
 
 @Component
 @ViewScoped

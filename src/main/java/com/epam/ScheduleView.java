@@ -1,18 +1,7 @@
 package com.epam;
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import com.epam.entity.Holidays;
+import com.epam.services.HolidayService;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -22,8 +11,18 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.epam.entity.Holidays;
-import com.epam.services.HolidayService;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Named
 @ViewScoped
@@ -31,7 +30,7 @@ public class ScheduleView implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject
+	@Autowired
 	transient HolidayService holService;
 	
 	@Autowired
@@ -106,7 +105,7 @@ public class ScheduleView implements Serializable {
     }
     
     public String showSchedule() {
-    	return  "../schedule.xhtml?faces-redirect=true";
+    	return  "schedule.xhtml?faces-redirect=true";
     }
      
     public void onDateSelect(SelectEvent selectEvent) {

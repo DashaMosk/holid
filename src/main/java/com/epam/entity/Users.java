@@ -1,8 +1,7 @@
 package com.epam.entity;
 
-import java.sql.Timestamp;
-
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 
 @Entity

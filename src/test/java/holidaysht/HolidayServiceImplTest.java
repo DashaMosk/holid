@@ -1,21 +1,19 @@
 package holidaysht;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.epam.dao.HolidaysDao;
 import com.epam.entity.Holidays;
 import com.epam.services.HolidayService;
 import com.epam.services.HolidayServiceImpl;
-
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Date;
-import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HolidayServiceImplTest {

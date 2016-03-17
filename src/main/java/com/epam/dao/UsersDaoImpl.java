@@ -1,15 +1,13 @@
 package com.epam.dao;
 
-import java.util.List;
+import com.epam.entity.Users;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
-
-import com.epam.entity.Users;
+import java.util.List;
 
 
 @Repository

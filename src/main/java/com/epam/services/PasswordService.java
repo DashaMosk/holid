@@ -1,12 +1,11 @@
 package com.epam.services;
 
+import org.springframework.stereotype.Service;
+import sun.misc.BASE64Encoder;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import org.springframework.stereotype.Service;
-
-import sun.misc.BASE64Encoder;
 
 @SuppressWarnings("restriction")
 @Service

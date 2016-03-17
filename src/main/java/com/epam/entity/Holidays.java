@@ -1,9 +1,8 @@
 package com.epam.entity;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
-
-import javax.persistence.*;
 
 @Entity
 @Table(name = "holidays")

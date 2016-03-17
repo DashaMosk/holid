@@ -1,8 +1,8 @@
 package com.epam.dao;
 
-import java.util.List;
-
 import com.epam.entity.Users;
+
+import java.util.List;
 
 public interface UsersDao {
 	public void save(Users user);

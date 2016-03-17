@@ -1,8 +1,9 @@
 package com.epam.dao;
-import java.util.Date;
-import java.util.List;
 
 import com.epam.entity.Holidays;
+
+import java.util.Date;
+import java.util.List;
 
 public interface HolidaysDao {
 	public void save(Holidays holiday);

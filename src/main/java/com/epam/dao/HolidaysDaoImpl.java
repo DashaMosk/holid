@@ -1,15 +1,14 @@
 package com.epam.dao;
 
-import java.util.Date;
-import java.util.List;
+import com.epam.entity.Holidays;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import org.springframework.stereotype.Repository;
-
-import com.epam.entity.Holidays;
-import org.apache.log4j.Logger;
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public class HolidaysDaoImpl implements HolidaysDao {

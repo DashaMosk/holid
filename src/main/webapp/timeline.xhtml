@@ -8,14 +8,14 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition template="WEB-INF/templates/basic.xhtml">
 
     <ui:define name="content">
         <h:body>
             <p:growl id="growl" showSummary="true" showDetail="false" autoUpdate="true"/>
 
-            <pe:timeline id="timeline" value="#{editServerTimelineController.model}" var="booking"
+            <pe:timeline id="timeline" value="#{editServerTimelineController.model}" var="vacations"
                          timeZone="#{editServerTimelineController.timeZone}"
                          zoomMax="#{editServerTimelineController.zoomMax}"
                          start="#{editServerTimelineController.start}"
@@ -23,27 +23,27 @@
                          editable="true" timeChangeable="#{editServerTimelineController.timeChangeable}"
                          showButtonNew="true" minHeight="200" widgetVar="timelineWdgt">
                 <p:ajax event="changed" update="@none" listener="#{editServerTimelineController.onChange}"/>
-                <p:ajax event="edit" update=":dialogForm:detailsBookingInner"
+                <p:ajax event="edit" update=":detailsBookingInner"
                         listener="#{editServerTimelineController.onEdit}"
                         oncomplete="PF('detailsBookingWdgt').show()"/>
-                <p:ajax event="add" update=":dialogForm:detailsBookingInner"
+                <p:ajax event="add" update=":detailsBookingInner"
                         listener="#{editServerTimelineController.onAdd}"
                         oncomplete="PF('detailsBookingWdgt').show()"/>
-                <p:ajax event="delete" update=":dialogForm:deleteBookingInner"
+                <p:ajax event="delete" update=":deleteBookingInner"
                         listener="#{editServerTimelineController.onDelete}"
                         onstart="PF('timelineWdgt').cancelDelete()" oncomplete="PF('deleteBookingWdgt').show()"/>
 
                 <h:panelGrid columns="1">
-                    <h:outputText value="Room: #{booking.roomNumber}"/>
-                    <h:outputText value="Category: #{booking.category.label}"/>
-                    <h:outputText value="Phone: #{booking.phone}"/>
+                    <h:outputText value="Name: #{vacations.userName}"/>
+                    <h:outputText value="Start: #{vacations.dateStart}"/>
+                    <h:outputText value="End: #{vacations.dateEnd}"/>
                 </h:panelGrid>
             </pe:timeline>
 
             <p:commandButton value="Toggle TimeChangeable" process="@this" update="timeline" style="margin-top:15px"
                              action="#{editServerTimelineController.toggleTimeChangeable}"/>
 
-            // Booking details dialog
+
             <p:dialog id="detailsBookingDlg" header="Booking Details" widgetVar="detailsBookingWdgt"
                       showEffect="clip" hideEffect="clip">
                 <h:panelGroup id="detailsBookingInner" layout="block">
@@ -53,14 +53,13 @@
                                      rendered="#{not empty editServerTimelineController.event}"
                                      required="true" label="Room"/>
 
-                        <h:outputText value="Category"/>
+                        <h:outputText value="Type"/>
                         <p:selectOneMenu value="#{editServerTimelineController.event.data.category}"
                                          rendered="#{not empty editServerTimelineController.event}">
-                            <f:selectItem itemLabel="Standard" itemValue="STANDARD"/>
-                            <f:selectItem itemLabel="Superior" itemValue="SUPERIOR"/>
-                            <f:selectItem itemLabel="Deluxe" itemValue="DELUXE"/>
-                            <f:selectItem itemLabel="Junior" itemValue="JUNIOR"/>
-                            <f:selectItem itemLabel="Executive Suite" itemValue="EXECUTIVE_SUITE"/>
+                            <f:selectItem itemLabel="Regular" itemValue="REGULAR"/>
+                            <f:selectItem itemLabel="Sick days" itemValue="SICK DAYS"/>
+                            <f:selectItem itemLabel="Without pay" itemValue="WITHOUT PAY"/>
+                            <f:selectItem itemLabel="Exceptional" itemValue="EXCEPTIONAL"/>
                         </p:selectOneMenu>
 
                         <h:outputText value="From"/>
@@ -95,7 +94,7 @@
                 </f:facet>
             </p:dialog>
 
-            // Booking delete dialog
+
             <p:dialog id="deleteBookingDlg" header="Booking Details" widgetVar="deleteBookingWdgt"
                       showEffect="clip" hideEffect="clip" dynamic="true">
                 <h:panelGroup id="deleteBookingInner" layout="block" style="margin:10px;">
