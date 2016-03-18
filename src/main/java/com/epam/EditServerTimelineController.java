@@ -56,19 +56,16 @@ public class EditServerTimelineController implements Serializable {
         model = new TimelineModel();
 
         List<Vacations> vacationsList = vacationsService.getAll();
-        // Server-side dates should be in UTC. They will be converted to a local dates in UI according to provided TimeZone.
-        // Submitted local dates in UI are converted back to UTC, so that server receives all dates in UTC again.
-
-        for(Vacations vac : vacationsList) {
+         for(Vacations vac : vacationsList) {
             LocalDate dStart = vac.getDateStart().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate dEnd = vac.getDateEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             cal.set(dStart.getYear(), dStart.getMonthValue(), dStart.getDayOfMonth(), 0, 0, 0);
             Date begin = cal.getTime();
             cal.set(dEnd.getYear(), dEnd.getMonthValue(), dEnd.getDayOfMonth(), 23, 59, 59);
-            Date end = cal.getTime();
-//           model.add(new TimelineEvent(new Booking(202, RoomCategory.EXECUTIVE_SUITE, "(0034) 987-333", "Three day booking"), begin,
-//                   end));
-            model.add(new TimelineEvent(new Vacations(vac.getUserName(), vac.getDateStart(), vac.getDateEnd(), vac.getDateSet(), vac.getIdUserSet()), begin, end));
+            Date endDate = cal.getTime();
+            TimelineEvent event = new TimelineEvent(vac.getDateStart(), begin, endDate, true, vac.getUserName());
+            model.add(event);
+
         }
     }
 
@@ -82,7 +79,7 @@ public class EditServerTimelineController implements Serializable {
         model.update(event);
 
         FacesMessage msg =
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "The booking dates " + getRoom() + " have been updated", null);
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "The vacation data has been updated", null);
         FacesContext.getCurrentInstance().addMessage(null, msg);
 
         // otherwise (if DB operation failed) a rollback can be done with the same response as follows:
@@ -98,7 +95,7 @@ public class EditServerTimelineController implements Serializable {
 
     public void onAdd(TimelineAddEvent e) {
         // get TimelineEvent to be added
-        event = new TimelineEvent(new Booking(), e.getStartDate(), e.getEndDate(), true, e.getGroup());
+        event = new TimelineEvent(e.getStartDate(), e.getStartDate(), e.getEndDate(), true, e.getGroup());
 
         // add the new event to the model in case if user will close or cancel the "Add dialog"
         // without to update details of the new event. Note: the event is already added in UI.
@@ -119,7 +116,7 @@ public class EditServerTimelineController implements Serializable {
         TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":timeline");
         model.delete(event, timelineUpdater);
 
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "The booking " + getRoom() + " has been deleted", null);
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "The vacation has been deleted", null);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -133,7 +130,7 @@ public class EditServerTimelineController implements Serializable {
         model.update(event, timelineUpdater);
 
         FacesMessage msg =
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "The booking details " + getRoom() + " have been saved", null);
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "The vacation has been saved", null);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -174,23 +171,13 @@ public class EditServerTimelineController implements Serializable {
     }
 
     public String getDeleteMessage() {
-        Integer room = ((Booking) event.getData()).getRoomNumber();
-        if (room == null) {
-            return "Do you really want to delete the new booking?";
+        String userName = ((Vacations) event.getData()).getUserName();
+        if (userName == null) {
+            return "Do you really want to delete the new vacation?";
         }
 
-        return "Do you really want to delete the booking for the room " + room + "?";
+        return "Do you really want to delete the vacation for the user " + userName + "?";
     }
-
-    public String getRoom() {
-        Integer room = ((Booking) event.getData()).getRoomNumber();
-        if (room == null) {
-            return "(new booking)";
-        } else {
-            return "(room " + room + ")";
-        }
-    }
-
 
     public String showVacations() {
         return  "timeline.xhtml?faces-redirect=true";

@@ -15,98 +15,77 @@
         <h:body>
             <p:growl id="growl" showSummary="true" showDetail="false" autoUpdate="true"/>
 
-            <pe:timeline id="timeline" value="#{editServerTimelineController.model}" var="vacations"
+            <pe:timeline id="timeline" value="#{editServerTimelineController.model}"
+                         eventMargin="10" eventMarginAxis="0" axisOnTop="true" showNavigation="true"
                          timeZone="#{editServerTimelineController.timeZone}"
                          zoomMax="#{editServerTimelineController.zoomMax}"
                          start="#{editServerTimelineController.start}"
                          end="#{editServerTimelineController.end}"
                          editable="true" timeChangeable="#{editServerTimelineController.timeChangeable}"
-                         showButtonNew="true" minHeight="200" widgetVar="timelineWdgt">
+                         showButtonNew="true" widgetVar="timelineWdgt">
                 <p:ajax event="changed" update="@none" listener="#{editServerTimelineController.onChange}"/>
-                <p:ajax event="edit" update=":detailsBookingInner"
+                <p:ajax event="edit" update=":detailsVacationInner"
                         listener="#{editServerTimelineController.onEdit}"
-                        oncomplete="PF('detailsBookingWdgt').show()"/>
-                <p:ajax event="add" update=":detailsBookingInner"
+                        oncomplete="PF('detailsVacationWdgt').show()"/>
+                <p:ajax event="add" update=":detailsVacationInner"
                         listener="#{editServerTimelineController.onAdd}"
-                        oncomplete="PF('detailsBookingWdgt').show()"/>
-                <p:ajax event="delete" update=":deleteBookingInner"
+                        oncomplete="PF('detailsVacationWdgt').show()"/>
+                <p:ajax event="delete" update=":deleteVacationInner"
                         listener="#{editServerTimelineController.onDelete}"
-                        onstart="PF('timelineWdgt').cancelDelete()" oncomplete="PF('deleteBookingWdgt').show()"/>
+                        onstart="PF('timelineWdgt').cancelDelete()" oncomplete="PF('deleteVacationWdgt').show()"/>
 
-                <h:panelGrid columns="1">
-                    <h:outputText value="Name: #{vacations.userName}"/>
-                    <h:outputText value="Start: #{vacations.dateStart}"/>
-                    <h:outputText value="End: #{vacations.dateEnd}"/>
-                </h:panelGrid>
             </pe:timeline>
 
             <p:commandButton value="Toggle TimeChangeable" process="@this" update="timeline" style="margin-top:15px"
                              action="#{editServerTimelineController.toggleTimeChangeable}"/>
 
 
-            <p:dialog id="detailsBookingDlg" header="Booking Details" widgetVar="detailsBookingWdgt"
+            <p:dialog id="detailsVacationDlg" header="Vacation Details" widgetVar="detailsVacationWdgt"
                       showEffect="clip" hideEffect="clip">
-                <h:panelGroup id="detailsBookingInner" layout="block">
-                    <h:panelGrid columns="2" columnClasses="bookingDetails1,bookingDetails2">
-                        <h:outputText value="Room"/>
-                        <p:inputText value="#{editServerTimelineController.event.data.roomNumber}"
-                                     rendered="#{not empty editServerTimelineController.event}"
-                                     required="true" label="Room"/>
-
-                        <h:outputText value="Type"/>
-                        <p:selectOneMenu value="#{editServerTimelineController.event.data.category}"
-                                         rendered="#{not empty editServerTimelineController.event}">
-                            <f:selectItem itemLabel="Regular" itemValue="REGULAR"/>
-                            <f:selectItem itemLabel="Sick days" itemValue="SICK DAYS"/>
-                            <f:selectItem itemLabel="Without pay" itemValue="WITHOUT PAY"/>
-                            <f:selectItem itemLabel="Exceptional" itemValue="EXCEPTIONAL"/>
+                <h:panelGroup id="detailsVacationInner" layout="block">
+                    <h:panelGrid columns="2" columnClasses="vacationDetails1,vacationDetails2">
+                        <h:outputText value="Name"/>
+                        <p:selectOneMenu id="categorySelect" value="#{editServerTimelineController.event.group}" >
+                            <f:selectItems value="#{usersView.users}" var="user"
+                                           itemLabel="#{user.login}"
+                                           itemValue="#{user.login}" />
                         </p:selectOneMenu>
 
                         <h:outputText value="From"/>
-                        <p:calendar value="#{editServerTimelineController.event.startDate}"
-                                    rendered="#{not empty editServerTimelineController.event}"
+                        <p:calendar id="startD" value="#{editServerTimelineController.event.startDate}"
                                     timeZone="#{editServerTimelineController.timeZone}"
-                                    pattern="dd/MM/yyyy HH:mm" required="true" label="From"/>
+                                    pattern="dd/MM/yyyy" required="true"/>
 
-                        <h:outputText value="Until"/>
+                        <h:outputText id="endD" value="Until"/>
                         <p:calendar value="#{editServerTimelineController.event.endDate}"
-                                    rendered="#{not empty editServerTimelineController.event}"
                                     timeZone="#{editServerTimelineController.timeZone}"
-                                    pattern="dd/MM/yyyy HH:mm" label="Until"/>
-
-                        <h:outputText value="Phone"/>
-                        <p:inputMask value="#{editServerTimelineController.event.data.phone}" mask="(9999) 999-999"
-                                     rendered="#{not empty editServerTimelineController.event}"/>
-
-                        <h:outputText value="Comment"/>
-                        <p:inputTextarea value="#{editServerTimelineController.event.data.comment}" autoResize="false"
-                                         rendered="#{not empty editServerTimelineController.event}"/>
+                                    pattern="dd/MM/yyyy"  required="true"/>
                     </h:panelGrid>
                 </h:panelGroup>
 
                 <f:facet name="footer">
                     <h:panelGroup layout="block" style="text-align:right; padding:2px; white-space:nowrap;">
-                        <p:commandButton value="Save" process="detailsBookingDlg" update="@none"
+                        <p:commandButton value="Save" process="detailsVacationDlg" update="@none"
                                          action="#{editServerTimelineController.saveDetails}"
-                                         oncomplete="if(!args.validationFailed){PF('detailsBookingWdgt').hide();}"/>
-                        <p:commandButton type="button" value="Close" onclick="PF('detailsBookingWdgt').hide()"/>
+                                         oncomplete="if(!args.validationFailed){PF('detailsVacationWdgt').hide();}"/>
+                        <p:commandButton type="button" value="Close" onclick="PF('detailsVacationWdgt').hide()"/>
                     </h:panelGroup>
                 </f:facet>
             </p:dialog>
 
 
-            <p:dialog id="deleteBookingDlg" header="Booking Details" widgetVar="deleteBookingWdgt"
+            <p:dialog id="deleteVacationDlg" header="Vacation Details" widgetVar="deleteVacationWdgt"
                       showEffect="clip" hideEffect="clip" dynamic="true">
-                <h:panelGroup id="deleteBookingInner" layout="block" style="margin:10px;">
+                <h:panelGroup id="deleteVacationInner" layout="block" style="margin:10px;">
                     <h:outputText value="#{editServerTimelineController.deleteMessage}"/>
                 </h:panelGroup>
 
                 <f:facet name="footer">
                     <h:panelGroup layout="block" style="text-align:right; padding:2px; white-space:nowrap;">
-                        <p:commandButton value="Delete" process="deleteBookingDlg" update="@none"
+                        <p:commandButton value="Delete" process="deleteVacationDlg" update="@none"
                                          action="#{editServerTimelineController.delete}"
-                                         oncomplete="PF('deleteBookingWdgt').hide()"/>
-                        <p:commandButton type="button" value="Close" onclick="PF('deleteBookingWdgt').hide()"/>
+                                         oncomplete="PF('deleteVacationWdgt').hide()"/>
+                        <p:commandButton type="button" value="Close" onclick="PF('deleteVacationWdgt').hide()"/>
                     </h:panelGroup>
                 </f:facet>
             </p:dialog>
