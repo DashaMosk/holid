@@ -113,7 +113,7 @@ public class EditServerTimelineController implements Serializable {
         // if everything was ok, delete the TimelineEvent in the model and update UI with the same response.
         // otherwise no server-side delete is necessary (see timelineWdgt.cancelDelete() in the p:ajax onstart).
         // we assume, delete in DB was successful
-        TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":timeline");
+        TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":mainForm:timeline");
         model.delete(event, timelineUpdater);
 
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "The vacation has been deleted", null);
@@ -126,7 +126,7 @@ public class EditServerTimelineController implements Serializable {
         // if everything was ok, update the TimelineEvent in the model and update UI with the same response.
         // otherwise no server-side update is necessary because UI is already up-to-date.
         // we assume, save in DB was successful
-        TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":timeline");
+        TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":mainForm:timeline");
         model.update(event, timelineUpdater);
 
         FacesMessage msg =
