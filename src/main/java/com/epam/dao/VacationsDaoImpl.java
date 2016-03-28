@@ -17,8 +17,9 @@ public class VacationsDaoImpl implements VacationsDao {
     private EntityManager em;
 
     @Override
-    public void save(Vacations vacation) {
+    public long save(Vacations vacation) {
         em.persist(vacation);
+        return vacation.getIdVacations();
     }
 
     @Override

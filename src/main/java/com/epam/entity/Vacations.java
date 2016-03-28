@@ -32,6 +32,15 @@ public class Vacations implements Serializable {
         this.idUserSet = idUserSet;
     }
 
+    public Vacations(long idVacations, String userName, Date dateStart, Date dateEnd, Timestamp dateSet, long idUserSet) {
+        this.idVacations = idVacations;
+        this.userName = userName;
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.dateSet = dateSet;
+        this.idUserSet = idUserSet;
+    }
+
     public long getIdVacations() {
         return idVacations;
     }

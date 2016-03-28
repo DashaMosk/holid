@@ -17,7 +17,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +40,9 @@ public class EditServerTimelineController implements Serializable {
 
     @Autowired
     private VacationsService vacationsService;
+
+    @Autowired
+    private LoginController loginController;
 
     @PostConstruct
     protected void initialize() {
@@ -63,7 +68,7 @@ public class EditServerTimelineController implements Serializable {
             Date begin = cal.getTime();
             cal.set(dEnd.getYear(), dEnd.getMonthValue(), dEnd.getDayOfMonth(), 23, 59, 59);
             Date endDate = cal.getTime();
-            TimelineEvent event = new TimelineEvent(vac.getDateStart(), begin, endDate, true, vac.getUserName());
+            TimelineEvent event = new TimelineEvent(vac.getDateStart(), begin, endDate, true, vac.getUserName(), String.valueOf(vac.getIdVacations()));
             model.add(event);
 
         }
@@ -74,7 +79,9 @@ public class EditServerTimelineController implements Serializable {
         event = e.getTimelineEvent();
 
         // update booking in DB...
-
+        Vacations vacation = new Vacations(Long.valueOf(event.getStyleClass()), event.getGroup(), event.getStartDate(),
+                event.getEndDate(), Timestamp.valueOf(LocalDateTime.now()), loginController.getUser().getIdUser());
+        vacationsService.edit(vacation);
         // if everything was ok, no UI update is required. Only the model should be updated
         model.update(event);
 

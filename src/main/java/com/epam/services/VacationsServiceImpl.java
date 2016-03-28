@@ -17,8 +17,8 @@ public class VacationsServiceImpl implements VacationsService {
     VacationsDao vacationsDao;
 
     @Override
-    public void save(Vacations holiday) {
-        vacationsDao.save(holiday);
+    public long save(Vacations holiday) {
+        return vacationsDao.save(holiday);
     }
 
     @Override
