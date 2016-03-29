@@ -105,7 +105,11 @@ public class ScheduleView implements Serializable {
     }
     
     public String showSchedule() {
-    	return  "schedule.xhtml?faces-redirect=true";
+    	return  "..\\schedule.xhtml?faces-redirect=true";
+    }
+    public String showSchedule1(String pageId) {
+        loginController.setPageId(pageId);
+        return  "schedule.xhtml?faces-redirect=true";
     }
      
     public void onDateSelect(SelectEvent selectEvent) {

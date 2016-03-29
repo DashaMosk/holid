@@ -50,7 +50,7 @@ public class EditServerTimelineController implements Serializable {
         zoomMax = 1000L * 60 * 60 * 24 * 360;
 
         // set initial start / end dates for the axis of the timeline (just for testing)
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         LocalDate localDate = LocalDate.now();
         cal.set(localDate.getYear(), Calendar.JANUARY, 1, 0, 0, 0);
         start = cal.getTime();
@@ -64,11 +64,13 @@ public class EditServerTimelineController implements Serializable {
          for(Vacations vac : vacationsList) {
             LocalDate dStart = vac.getDateStart().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate dEnd = vac.getDateEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            cal.set(dStart.getYear(), dStart.getMonthValue(), dStart.getDayOfMonth(), 0, 0, 0);
+            cal.set(dStart.getYear(), dStart.getMonthValue()-1, dStart.getDayOfMonth(), 0, 0, 0);
             Date begin = cal.getTime();
-            cal.set(dEnd.getYear(), dEnd.getMonthValue(), dEnd.getDayOfMonth(), 23, 59, 59);
+            cal.set(dEnd.getYear(), dEnd.getMonthValue()-1, dEnd.getDayOfMonth(), 23, 59, 59);
             Date endDate = cal.getTime();
-            TimelineEvent event = new TimelineEvent(vac.getDateStart(), begin, endDate, true, vac.getUserName(), String.valueOf(vac.getIdVacations()));
+            String msg = ""+dStart.getDayOfMonth()+dStart.getMonth().toString().substring(0,3).toLowerCase()
+                    + " - " + dEnd.getDayOfMonth()+dEnd.getMonth().toString().substring(0,3).toLowerCase();
+            TimelineEvent event = new TimelineEvent(msg, begin, endDate, true, vac.getUserName(), String.valueOf(vac.getIdVacations()));
             model.add(event);
 
         }
@@ -83,11 +85,17 @@ public class EditServerTimelineController implements Serializable {
                 event.getEndDate(), Timestamp.valueOf(LocalDateTime.now()), loginController.getUser().getIdUser());
         vacationsService.edit(vacation);
         // if everything was ok, no UI update is required. Only the model should be updated
+
+        LocalDate dEnd = event.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dStart = event.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String msg = ""+dStart.getDayOfMonth()+dStart.getMonth().toString().substring(0,3).toLowerCase()
+                + " - " + dEnd.getDayOfMonth()+dEnd.getMonth().toString().substring(0,3).toLowerCase();
+        event.setData(msg);
         model.update(event);
 
-        FacesMessage msg =
+        FacesMessage msgF =
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "The vacation data has been updated", null);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage(null, msgF);
 
         // otherwise (if DB operation failed) a rollback can be done with the same response as follows:
         // TimelineEvent oldEvent = model.getEvent(model.getIndex(event));
@@ -102,7 +110,7 @@ public class EditServerTimelineController implements Serializable {
 
     public void onAdd(TimelineAddEvent e) {
         // get TimelineEvent to be added
-        event = new TimelineEvent(e.getStartDate(), e.getStartDate(), e.getEndDate(), true, e.getGroup());
+        event = new TimelineEvent(null, e.getStartDate(), e.getEndDate(), true, e.getGroup());
 
         // add the new event to the model in case if user will close or cancel the "Add dialog"
         // without to update details of the new event. Note: the event is already added in UI.
@@ -116,7 +124,9 @@ public class EditServerTimelineController implements Serializable {
 
     public void delete() {
         // delete booking in DB...
-
+        if(event.getStyleClass() != null) {
+            vacationsService.delete(Long.valueOf(event.getStyleClass()));
+        }
         // if everything was ok, delete the TimelineEvent in the model and update UI with the same response.
         // otherwise no server-side delete is necessary (see timelineWdgt.cancelDelete() in the p:ajax onstart).
         // we assume, delete in DB was successful
@@ -129,16 +139,28 @@ public class EditServerTimelineController implements Serializable {
 
     public void saveDetails() {
         // save the updated booking in DB...
-
+        long idV = 0;
+        if(event.getStyleClass() != null) {
+            idV = Long.valueOf(event.getStyleClass());
+        }
+        LocalDate dEnd = event.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dStart = event.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String msg = ""+dStart.getDayOfMonth()+dStart.getMonth().toString().substring(0,3).toLowerCase()
+                + " - " + dEnd.getDayOfMonth()+dEnd.getMonth().toString().substring(0,3).toLowerCase();
+        event.setData(msg);
+        Vacations vacation = new Vacations(idV, event.getGroup(), event.getStartDate(),
+                event.getEndDate(), Timestamp.valueOf(LocalDateTime.now()), loginController.getUser().getIdUser());
+        vacationsService.save(vacation);
+        event.setStyleClass(String.valueOf(vacation.getIdVacations()));
         // if everything was ok, update the TimelineEvent in the model and update UI with the same response.
         // otherwise no server-side update is necessary because UI is already up-to-date.
         // we assume, save in DB was successful
         TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":mainForm:timeline");
         model.update(event, timelineUpdater);
 
-        FacesMessage msg =
+        FacesMessage msgF =
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "The vacation has been saved", null);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage(null, msgF);
     }
 
     public TimelineModel getModel() {
@@ -177,16 +199,8 @@ public class EditServerTimelineController implements Serializable {
         timeChangeable = !timeChangeable;
     }
 
-    public String getDeleteMessage() {
-        String userName = ((Vacations) event.getData()).getUserName();
-        if (userName == null) {
-            return "Do you really want to delete the new vacation?";
-        }
-
-        return "Do you really want to delete the vacation for the user " + userName + "?";
-    }
-
-    public String showVacations() {
+    public String showVacations(String idPage) {
+        loginController.setPageId(idPage);
         return  "timeline.xhtml?faces-redirect=true";
     }
 

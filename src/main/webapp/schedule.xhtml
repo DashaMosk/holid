@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:ui="http://java.sun.com/jsf/facelets"
 	  xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:p="http://primefaces.org/ui">
+	  xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition template="WEB-INF/templates/basic.xhtml">
 	
 	<ui:define name="content">
@@ -61,7 +61,8 @@
 				
 				<h:panelGrid id="signIn" columns="2" rendered="#{not loginController.isLoggedIn()}">
 					<h:outputText value="You should sign in" />
-                     <p:commandButton id="autorith" value="Sign in" action="#{loginController.signIn()}"/>				
+                     <p:commandButton id="autorith" value="Sign in" action="#{loginController.signIn()}">
+					 </p:commandButton>
 				</h:panelGrid>
 			</p:dialog>
 		</h:form>

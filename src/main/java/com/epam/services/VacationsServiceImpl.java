@@ -2,14 +2,12 @@ package com.epam.services;
 
 import com.epam.dao.VacationsDao;
 import com.epam.entity.Vacations;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-/**
- * Created by Daria on 17.03.2016.
- */
 @Named
 public class VacationsServiceImpl implements VacationsService {
 
@@ -17,18 +15,21 @@ public class VacationsServiceImpl implements VacationsService {
     VacationsDao vacationsDao;
 
     @Override
+    @Transactional
     public long save(Vacations holiday) {
         return vacationsDao.save(holiday);
     }
 
     @Override
+    @Transactional
     public void edit(Vacations holiday) {
         vacationsDao.edit(holiday);
     }
 
     @Override
-    public void delete(Vacations holiday) {
-        vacationsDao.delete(holiday);
+    @Transactional
+    public void delete(long id) {
+        vacationsDao.delete(id);
     }
 
     @Override

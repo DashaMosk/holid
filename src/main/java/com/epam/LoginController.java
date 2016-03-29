@@ -1,8 +1,10 @@
 package com.epam;
 
+import com.epam.entity.Page;
 import com.epam.entity.Users;
 import com.epam.services.PasswordService;
 import com.epam.services.UsersService;
+import org.primefaces.context.PrimeFacesContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.util.Map;
 
 @Component
 @SessionScoped
@@ -25,6 +28,7 @@ public class LoginController {
 
 	private String username;
 	private String password;
+	private Page page;
 
 	public LoginController() {
 	}
@@ -56,7 +60,22 @@ public class LoginController {
 	public boolean isLoggedIn() {
 		return user != null;
 	}
-	
+
+	public Page getPage() {
+		return page;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
+	}
+
+	public void setPageId(String pageId) {
+		if(pageId.equals("2"))
+			page = Page.TIMELINE;
+		if(pageId.equals("1"))
+			page = Page.SCHEDULE;
+	}
+
 	public boolean isAdmin() {
 		if (isLoggedIn()) {
 			return (user.getRights() == 1);
@@ -81,15 +100,14 @@ public class LoginController {
 	        return null;
 		}
 
-		if (user.getRights() == 1) {
-			user.setLoggedIn(true);
-			return redirectTo("/admin/users.xhtml");
-		} else if (user.getRights() == 2) {
-			user.setLoggedIn(true);
+		user.setLoggedIn(true);
+		if (page == Page.SCHEDULE) {
 			return redirectTo("schedule.xhtml");
-		} else {
-			return redirectTo("loginPage.xhtml");
 		}
+		if (page == Page.TIMELINE) {
+			return redirectTo("timeline.xhtml");
+		}
+		return redirectTo("index.xhtml");
 	}
 	
 	public String signIn() {

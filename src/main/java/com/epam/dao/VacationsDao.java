@@ -10,6 +10,6 @@ import java.util.List;
 public interface VacationsDao {
     public long save(Vacations holiday);
     public void edit(Vacations holiday);
-    public void delete(Vacations holiday);
+    public void delete(long id);
     public List<Vacations> getAll();
 }

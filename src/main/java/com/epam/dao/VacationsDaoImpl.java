@@ -18,7 +18,11 @@ public class VacationsDaoImpl implements VacationsDao {
 
     @Override
     public long save(Vacations vacation) {
-        em.persist(vacation);
+        if(vacation.getIdVacations() == 0) {
+            em.persist(vacation);
+        } else {
+            em.merge(vacation);
+        }
         return vacation.getIdVacations();
     }
 
@@ -28,8 +32,8 @@ public class VacationsDaoImpl implements VacationsDao {
     }
 
     @Override
-    public void delete(Vacations vacation) {
-        Vacations vac = em.find(Vacations.class, vacation.getIdVacations());
+    public void delete(long id) {
+        Vacations vac = em.find(Vacations.class, id);
         em.remove(vac);
     }
 
