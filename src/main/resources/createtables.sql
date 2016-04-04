@@ -19,5 +19,15 @@ CREATE TABLE `users` (
   PRIMARY KEY (`iduser`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `vacations` (
+  `idvacations` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) DEFAULT NULL,
+  `datestart` date DEFAULT NULL,
+  `dateend` date DEFAULT NULL,
+  `dateset` timestamp NULL DEFAULT NULL,
+  `iduserset` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idvacations`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
 /*ALTER TABLE `hthollydays`.`users`
 CHANGE COLUMN `blockdate` `blockdate` TIMESTAMP NULL DEFAULT NULL COMMENT '';*/
