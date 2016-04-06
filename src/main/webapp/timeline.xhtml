@@ -42,7 +42,7 @@
 
           <p:dialog id="detailsVacationDlg" header="Vacation Details" widgetVar="detailsVacationWdgt"
                       showEffect="clip" hideEffect="clip">
-                    <h:panelGrid id="detailsVacationInner" columns="2" rendered="#{loginController.isLoggedIn()}">
+                    <h:panelGrid id="detailsVacationInner" columns="2">
                         <h:outputText value="Name"/>
                         <p:selectOneMenu id="categorySelect" value="#{editServerTimelineController.event.group}" >
                             <f:selectItems value="#{usersView.users}" var="user"
@@ -59,13 +59,16 @@
                         <p:calendar value="#{editServerTimelineController.event.endDate}"
                                     timeZone="#{editServerTimelineController.timeZone}"
                                     pattern="dd/MM/yyyy" label="Until"/>
-                        <p:commandButton value="Save" process="detailsVacationDlg" update="@none"
-                                         action="#{editServerTimelineController.saveDetails}"
-                                         oncomplete="if(!args.validationFailed){PF('detailsVacationWdgt').hide();}"/>
-                        <p:commandButton type="button" value="Close" onclick="PF('detailsVacationWdgt').hide()"/>
                     </h:panelGrid>
-                    <h:panelGrid id="signInDetails" columns="2" rendered="#{not loginController.isLoggedIn()}">
-                        <h:outputText value="You should sign in" />
+                    <h:panelGrid id="detailsCommandButton" columns="2" rendered="#{loginController.isLoggedIn()}">
+
+                    <p:commandButton value="Save" process="detailsVacationDlg" update="@none"
+                               action="#{editServerTimelineController.saveDetails}"
+                               oncomplete="if(!args.validationFailed){PF('detailsVacationWdgt').hide();}"/>
+                    <p:commandButton type="button" value="Close" onclick="PF('detailsVacationWdgt').hide()"/>
+                    </h:panelGrid>
+              <h:panelGrid id="signInDetails" columns="2" rendered="#{not loginController.isLoggedIn()}">
+                        <h:outputText value="You should sign in " />
                         <p:commandButton id="autor" value="Sign in" action="#{loginController.signIn()}"/>
                     </h:panelGrid>
             </p:dialog>

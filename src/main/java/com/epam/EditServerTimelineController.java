@@ -35,7 +35,7 @@ public class EditServerTimelineController implements Serializable {
     private long zoomMax;
     private Date start;
     private Date end;
-    private TimeZone timeZone = TimeZone.getTimeZone("Europe/Madrid");
+    private TimeZone timeZone = TimeZone.getDefault();//getTimeZone("Europe/Madrid");
     private boolean timeChangeable = true;
 
     @Autowired
